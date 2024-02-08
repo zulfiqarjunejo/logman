@@ -2,21 +2,24 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 )
 
 const PORT = ":9001"
 
 func main() {
-	fmt.Println("Setting up server")
-
 	mux := http.NewServeMux()
-	mux.HandleFunc("/logs", handleLogs)
+
+	lh := http.HandlerFunc(logsHandler)
+
+	mux.Handle("/logs", RouteInfoMiddleware(lh))
+
+	log.Printf("Starting server on port %s\n", PORT)
 
 	err := http.ListenAndServe(PORT, mux)
 	if err != nil {
-		fmt.Errorf("Unexpected error: %+v", err.Error())
+		log.Fatalf("Unexpected error: %+v", err.Error())
 	}
 }
 
@@ -32,8 +35,7 @@ type Log struct {
 
 var logs []Log = []Log{}
 
-func handleLogs(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("%s %s\n", r.Method, r.URL)
+func logsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(&logs)
