@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func RouteInfoMiddleware(next http.Handler) http.Handler {
+func PrintRouteInfo(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		path := r.URL
 		method := r.Method
