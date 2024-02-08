@@ -11,9 +11,10 @@ const PORT = ":9001"
 func main() {
 	fmt.Println("Setting up server")
 
-	http.HandleFunc("/logs", handleLogs)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/logs", handleLogs)
 
-	err := http.ListenAndServe(PORT, nil)
+	err := http.ListenAndServe(PORT, mux)
 	if err != nil {
 		fmt.Errorf("Unexpected error: %+v", err.Error())
 	}

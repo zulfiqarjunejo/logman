@@ -2,9 +2,17 @@
 
 ## 07.02.2024
 ### Tasks
-    [] Create a no bullshit backend to create and read logs in Golang.
+    [x] Create an endpoint to create logs.
+    [x] Create an endpoint to read all logs.
 ### Stuff to learn
+    [x] What is MUX? How does MUX work? Learn in details.
+
+## 08.02.2024
+### Tasks
+    [x] Refactor application to use a local MUX instead of the global DefaultServeMux
+### Stuff to learn
+    [x] What is MUX? How does MUX work? Learn in details.
     [] How to implement middlewares in Golang?
-    [] How does MUX work? Learn in details.
+    [] Why should I use gorilla/mux or any other Golang framework?
     [] How do streams work?
     [] Arrays/slices in Golang.
