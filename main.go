@@ -13,7 +13,7 @@ func main() {
 
 	lh := http.HandlerFunc(logsHandler)
 
-	mux.Handle("/logs", RouteInfoMiddleware(lh))
+	mux.Handle("/logs", PrintRouteInfo(lh))
 
 	log.Printf("Starting server on port %s\n", PORT)
 
