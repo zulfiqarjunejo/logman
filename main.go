@@ -12,8 +12,10 @@ func main() {
 	mux := http.NewServeMux()
 
 	lh := http.HandlerFunc(logsHandler)
+	fs := http.FileServer(http.Dir("./static"))
 
-	mux.Handle("/logs", PrintRouteInfo(lh))
+	mux.Handle("/api/logs", PrintRouteInfo(lh))
+	mux.Handle("/", fs)
 
 	log.Printf("Starting server on port %s\n", PORT)
 

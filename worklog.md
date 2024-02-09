@@ -20,4 +20,4 @@
 
 ## 09.02.2024
 ### Tasks
-    [] Create a static webpage served on root path. E.g., "/"
+    [x] Create a static webpage served on root path. E.g., "/"
