@@ -17,3 +17,7 @@
     [] Why should I use gorilla/mux or any other Golang framework?
     [] How do streams work?
     [] Arrays/slices in Golang.
+
+## 09.02.2024
+### Tasks
+    [x] Create a static webpage served on root path. E.g., "/"
