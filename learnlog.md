@@ -6,3 +6,5 @@
 - [ ] Why should I use gorilla/mux or any other Golang framework?
 - [ ] How do streams work?
 - [ ] Arrays/slices in Golang.
+- [ ] MongoDB with Golang.
+- [ ] How to load dotenv with Golang (https://github.com/joho/godotenv)
