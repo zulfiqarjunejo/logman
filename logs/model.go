@@ -1,4 +1,4 @@
-package models
+package logs
 
 import (
 	"context"
@@ -7,30 +7,29 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Log struct {
-	Details string `json:"details"`
-	Message string `json:"message"`
+type LogModel interface {
+	Create(Log) error
+	GetAll() ([]Log, error)
 }
 
-func NewLog(details string, message string) Log {
-	return Log{
-		Details: details,
-		Message: message,
-	}
-}
-
-type LogModel struct {
+type MongoLogModel struct {
 	Mongo *mongo.Client
 }
 
-func (logModel *LogModel) Create(log Log) error {
+func NewMongoLogModel(mongo *mongo.Client) MongoLogModel {
+	return MongoLogModel{
+		Mongo: mongo,
+	}
+}
+
+func (logModel *MongoLogModel) Create(log Log) error {
 	// TODO: Revise the code after learning MongoDB with Golang.
 	logsCollection := logModel.Mongo.Database("logs").Collection("logs")
 	_, err := logsCollection.InsertOne(context.Background(), log)
 	return err
 }
 
-func (logModel *LogModel) GetAll() ([]Log, error) {
+func (logModel *MongoLogModel) GetAll() ([]Log, error) {
 	// TODO: Revise the code after learning MongoDB with Golang.
 	logsCollection := logModel.Mongo.Database("logs").Collection("logs")
 

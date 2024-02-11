@@ -2,57 +2,16 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"log"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/joho/godotenv"
-	"github.com/zulfiqarjunejo/logs-management-system/models"
+	"github.com/zulfiqarjunejo/logs-management-system/logs"
 	"go.mongodb.org/mongo-driver/mongo"
 	mongoOptions "go.mongodb.org/mongo-driver/mongo/options"
 )
-
-type CreateLogRequestBody struct {
-	Message string `json:"message"`
-	Details string `json:"details"`
-}
-
-type Env struct {
-	logs models.LogModel
-}
-
-func (env Env) logsHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		logs, err := env.logs.GetAll()
-		if err != nil {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			return
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(&logs)
-	} else if r.Method == "POST" {
-		var createLogRequestBody CreateLogRequestBody
-
-		err := json.NewDecoder(r.Body).Decode(&createLogRequestBody)
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-		}
-
-		newLog := models.NewLog(createLogRequestBody.Details, createLogRequestBody.Message)
-		err = env.logs.Create(newLog)
-		if err != nil {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			return
-		}
-
-		w.WriteHeader(http.StatusCreated)
-	} else {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-	}
-}
 
 func main() {
 	err := godotenv.Load(".env", ".env.local")
@@ -76,18 +35,16 @@ func main() {
 		}
 	}()
 
-	env := &Env{
-		logs: models.LogModel{
-			Mongo: client,
-		},
-	}
+	// Initialize models.
+	logModel := logs.NewMongoLogModel(client)
 
-	mux := http.NewServeMux()
-
-	lh := http.HandlerFunc(env.logsHandler)
+	// Initialize handlers.
+	logHandler := logs.NewLogHandler(&logModel)
 	fs := http.FileServer(http.Dir("./static"))
 
-	mux.Handle("/api/logs", PrintRouteInfo(lh))
+	// Setup MUX
+	mux := http.NewServeMux()
+	mux.Handle("/api/logs", PrintRouteInfo(logHandler))
 	mux.Handle("/", fs)
 
 	log.Printf("Starting server on port %s\n", PORT)
