@@ -36,7 +36,7 @@ func main() {
 	}()
 
 	// Initialize models.
-	logModel := logs.NewLogModel(client)
+	logModel := logs.NewMongoLogModel(client)
 
 	// Initialize handlers.
 	logHandler := logs.NewLogHandler(&logModel)

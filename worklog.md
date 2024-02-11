@@ -9,4 +9,5 @@
 - [x] Mock the models
 - [ ] Unit test the log handler
 - [ ] Refactor the log handler according the Uncle Bob's book
+- [ ] Calculate & show diff of expected and obtained in tests
 

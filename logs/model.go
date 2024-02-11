@@ -7,24 +7,29 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type LogModel struct {
+type LogModel interface {
+	Create(Log) error
+	GetAll() ([]Log, error)
+}
+
+type MongoLogModel struct {
 	Mongo *mongo.Client
 }
 
-func NewLogModel(mongo *mongo.Client) LogModel {
-	return LogModel{
+func NewMongoLogModel(mongo *mongo.Client) MongoLogModel {
+	return MongoLogModel{
 		Mongo: mongo,
 	}
 }
 
-func (logModel *LogModel) Create(log Log) error {
+func (logModel *MongoLogModel) Create(log Log) error {
 	// TODO: Revise the code after learning MongoDB with Golang.
 	logsCollection := logModel.Mongo.Database("logs").Collection("logs")
 	_, err := logsCollection.InsertOne(context.Background(), log)
 	return err
 }
 
-func (logModel *LogModel) GetAll() ([]Log, error) {
+func (logModel *MongoLogModel) GetAll() ([]Log, error) {
 	// TODO: Revise the code after learning MongoDB with Golang.
 	logsCollection := logModel.Mongo.Database("logs").Collection("logs")
 

@@ -6,10 +6,10 @@ import (
 )
 
 type LogHandler struct {
-	logs *LogModel
+	logs LogModel
 }
 
-func NewLogHandler(model *LogModel) LogHandler {
+func NewLogHandler(model LogModel) LogHandler {
 	return LogHandler{
 		logs: model,
 	}
