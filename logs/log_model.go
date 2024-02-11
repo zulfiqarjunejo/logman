@@ -1,4 +1,4 @@
-package models
+package logs
 
 import (
 	"context"
@@ -7,20 +7,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Log struct {
-	Details string `json:"details"`
-	Message string `json:"message"`
-}
-
-func NewLog(details string, message string) Log {
-	return Log{
-		Details: details,
-		Message: message,
-	}
-}
-
 type LogModel struct {
 	Mongo *mongo.Client
+}
+
+func NewLogModel(mongo *mongo.Client) LogModel {
+	return LogModel{
+		Mongo: mongo,
+	}
 }
 
 func (logModel *LogModel) Create(log Log) error {
