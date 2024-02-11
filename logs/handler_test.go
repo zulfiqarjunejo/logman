@@ -39,7 +39,7 @@ func TestGetAllLogs(t *testing.T) {
 	logModel := MockLogModel{}
 	logHandler := NewLogHandler(logModel)
 
-	http.HandlerFunc(logHandler.Handler).ServeHTTP(recorder, request)
+	logHandler.ServeHTTP(recorder, request)
 
 	var logs []Log
 	err = json.NewDecoder(recorder.Body).Decode(&logs)

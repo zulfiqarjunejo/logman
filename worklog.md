@@ -7,7 +7,7 @@
 - [x] Create a static webpage served on root path. E.g., "/"
 - [x] Add models i-e: interfaces with functions to manage data
 - [x] Mock the models
-- [ ] Unit test the log handler
-- [ ] Refactor the log handler according the Uncle Bob's book
+- [x] Unit test the log handler
+- [x] Refactor the log handler according the Uncle Bob's book
 - [ ] Calculate & show diff of expected and obtained in tests
 

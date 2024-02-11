@@ -40,14 +40,11 @@ func main() {
 
 	// Initialize handlers.
 	logHandler := logs.NewLogHandler(&logModel)
+	fs := http.FileServer(http.Dir("./static"))
 
 	// Setup MUX
 	mux := http.NewServeMux()
-
-	lh := http.HandlerFunc(logHandler.Handler)
-	fs := http.FileServer(http.Dir("./static"))
-
-	mux.Handle("/api/logs", PrintRouteInfo(lh))
+	mux.Handle("/api/logs", PrintRouteInfo(logHandler))
 	mux.Handle("/", fs)
 
 	log.Printf("Starting server on port %s\n", PORT)
