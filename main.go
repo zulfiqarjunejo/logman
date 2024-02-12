@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/zulfiqarjunejo/logs-management-system/clients"
 	"github.com/zulfiqarjunejo/logs-management-system/logs"
 	"go.mongodb.org/mongo-driver/mongo"
 	mongoOptions "go.mongodb.org/mongo-driver/mongo/options"
@@ -37,6 +38,10 @@ func main() {
 
 	// Initialize models.
 	logModel := logs.NewMongoLogModel(client)
+	clientModel := clients.NewMongoClientModel(client)
+
+	// Initialize middlewares, if needed.
+	checkApiKey := CreateCheckApiKey(&clientModel)
 
 	// Initialize handlers.
 	logHandler := logs.NewLogHandler(&logModel)
@@ -44,7 +49,7 @@ func main() {
 
 	// Setup MUX
 	mux := http.NewServeMux()
-	mux.Handle("/api/logs", PrintRouteInfo(logHandler))
+	mux.Handle("/api/logs", PrintRouteInfo(checkApiKey(logHandler)))
 	mux.Handle("/", fs)
 
 	log.Printf("Starting server on port %s\n", PORT)

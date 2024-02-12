@@ -10,4 +10,5 @@
 - [x] Unit test the log handler
 - [x] Refactor the log handler according the Uncle Bob's book
 - [ ] Calculate & show diff of expected and obtained in tests
+- [x] Authentication using Api Key
 

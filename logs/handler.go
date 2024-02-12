@@ -3,6 +3,9 @@ package logs
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/zulfiqarjunejo/logs-management-system/clients"
+	"github.com/zulfiqarjunejo/logs-management-system/types"
 )
 
 type CreateLogRequestBody struct {
@@ -22,6 +25,9 @@ func handleGet(w http.ResponseWriter, r *http.Request, model LogModel) {
 }
 
 func handlePost(w http.ResponseWriter, r *http.Request, model LogModel) {
+	const clientContextKey types.ContextKey = 0
+	client := r.Context().Value(clientContextKey).(clients.Client)
+
 	var createLogRequestBody CreateLogRequestBody
 
 	err := json.NewDecoder(r.Body).Decode(&createLogRequestBody)
@@ -29,7 +35,7 @@ func handlePost(w http.ResponseWriter, r *http.Request, model LogModel) {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-	newLog := NewLog(createLogRequestBody.Details, createLogRequestBody.Message)
+	newLog := NewLog(client.Id, createLogRequestBody.Details, createLogRequestBody.Message)
 	err = model.Create(newLog)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
