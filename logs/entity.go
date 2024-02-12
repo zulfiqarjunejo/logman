@@ -1,13 +1,15 @@
 package logs
 
 type Log struct {
-	Details string `json:"details"`
-	Message string `json:"message"`
+	ClientId string `json:"client_id" bson:"client_id"`
+	Details  string `json:"details" bson:"details"`
+	Message  string `json:"message" bson:"message"`
 }
 
-func NewLog(details string, message string) Log {
+func NewLog(clientId string, details string, message string) Log {
 	return Log{
-		Details: details,
-		Message: message,
+		ClientId: clientId,
+		Details:  details,
+		Message:  message,
 	}
 }
