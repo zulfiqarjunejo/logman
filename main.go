@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/zulfiqarjunejo/logs-management-system/clients"
 	"github.com/zulfiqarjunejo/logs-management-system/logs"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -49,6 +50,7 @@ func main() {
 
 	// Setup MUX
 	mux := http.NewServeMux()
+	mux.Handle("/metrics", promhttp.Handler())
 	mux.Handle("/api/logs", PrintRouteInfo(checkApiKey(logHandler)))
 	mux.Handle("/", fs)
 
