@@ -12,4 +12,5 @@
 - [ ] Calculate & show diff of expected and obtained in tests
 - [x] Authentication using Api Key
 - [x] Improve homepage.
+- [x] Add `/metrics` endpoint for Prometheus
 
