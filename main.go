@@ -45,12 +45,14 @@ func main() {
 	checkApiKey := CreateCheckApiKey(&clientModel)
 
 	// Initialize handlers.
+	clientHandler := clients.NewClientHandler(&clientModel)
 	logHandler := logs.NewLogHandler(&logModel)
 	fs := http.FileServer(http.Dir("./static"))
 
 	// Setup MUX
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.Handler())
+	mux.Handle("/api/clients", PrintRouteInfo(checkApiKey(clientHandler)))
 	mux.Handle("/api/logs", PrintRouteInfo(checkApiKey(logHandler)))
 	mux.Handle("/", fs)
 

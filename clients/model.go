@@ -9,6 +9,7 @@ import (
 
 type ClientModel interface {
 	FindClientById(id string) (Client, error)
+	GetAll() ([]Client, error)
 }
 
 type MongoClientModel struct {
@@ -34,4 +35,22 @@ func (clientModel *MongoClientModel) FindClientById(id string) (Client, error) {
 	}
 
 	return client, nil
+}
+
+func (clientModel *MongoClientModel) GetAll() ([]Client, error) {
+	clientsCollection := clientModel.Mongo.Database("logs").Collection("clients")
+
+	filter := bson.D{{}}
+	cursor, err := clientsCollection.Find(context.Background(), filter)
+	if err != nil {
+		return nil, err
+	}
+
+	var clients []Client
+	err = cursor.All(context.Background(), &clients)
+	if err != nil {
+		return nil, err
+	}
+
+	return clients, nil
 }
