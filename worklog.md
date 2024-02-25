@@ -13,4 +13,5 @@
 - [x] Authentication using Api Key
 - [x] Improve homepage.
 - [x] Add `/metrics` endpoint for Prometheus
+- [x] Serve placeholder OpenAPI Specification
 
