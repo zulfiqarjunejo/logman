@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -56,6 +58,27 @@ func main() {
 	mux.Handle("/api/clients", PrintRouteInfo(checkApiKey(clientHandler)))
 	mux.Handle("/api/logs", PrintRouteInfo(checkApiKey(logHandler)))
 	mux.Handle("/swagger/", http.StripPrefix("/swagger/", swaggerHandler))
+
+	mux.HandleFunc("/candies/", func(w http.ResponseWriter, r *http.Request) {
+		method := r.Method
+		if method == "GET" {
+			id := strings.TrimPrefix(r.URL.Path, "/candies/")
+			if id == "" {
+				// handle list operation e.g., list all candies
+				candies := []string{"all", "of", "my", "candies"}
+				json.NewEncoder(w).Encode(candies)
+			} else {
+				candy := "only one candy"
+				json.NewEncoder(w).Encode(candy)
+			}
+		} else if method == "POST" {
+			// handle post operation e.g., create a candy.
+		} else {
+			// handle method not allowed e.g., log it somewhere.
+			w.WriteHeader(http.StatusMethodNotAllowed)
+		}
+	})
+
 	mux.Handle("/", staticFileSystemHandler)
 
 	log.Printf("Starting server on port %s\n", PORT)
