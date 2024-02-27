@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -56,6 +58,19 @@ func main() {
 	mux.Handle("/api/clients", PrintRouteInfo(checkApiKey(clientHandler)))
 	mux.Handle("/api/logs", PrintRouteInfo(checkApiKey(logHandler)))
 	mux.Handle("/swagger/", http.StripPrefix("/swagger/", swaggerHandler))
+
+	mux.HandleFunc("GET /candies/", func(w http.ResponseWriter, r *http.Request) {
+		candies := []string{"all", "of", "my", "candies"}
+		json.NewEncoder(w).Encode(candies)
+	})
+
+	mux.HandleFunc("GET /candies/{id}", func(w http.ResponseWriter, r *http.Request) {
+		id := r.PathValue("id")
+		fmt.Printf("id = %s\n", id)
+		candy := "only one candy"
+		json.NewEncoder(w).Encode(candy)
+	})
+
 	mux.Handle("/", staticFileSystemHandler)
 
 	log.Printf("Starting server on port %s\n", PORT)
