@@ -1,204 +1,174 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "title": "feature.proto",
-      "version": "version not set"
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Logman",
+    "description": "Logman provides an easy-to-use and simple API to manage logs",
+    "contact": {
+      "email": "zulfiqarjunejo@live.com"
     },
-    "schemes": [
-      "http",
-      "https"
-    ],
-    "consumes": [
-      "application/json"
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "paths": {
-      "/logs": {
-        "get": {
-          "summary": "GET /ops/features",
-          "operationId": "ListFeatures",
-          "responses": {
-            "200": {
-              "description": "",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.11"
+  },
+  "servers": [
+    {
+      "url": "localhost/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "log",
+      "description": "Operations about logs"
+    },
+    {
+      "name": "client",
+      "description": "Operations about client"
+    }
+  ],
+  "paths": {
+    "/logs": {
+      "get": {
+        "tags": ["log"],
+        "summary": "Fetches logs",
+        "description": "Fetches logs",
+        "operationId": "fetch-logs",
+        "responses": {
+          "200": {
+            "description": "Logs fetched successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["clientId", "message"],
+                  "properties": {
+                    "clientId": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "examples": [
+                    {
+                      "clientId": "123",
+                      "details": "change value of x from 0 to 1",
+                      "message": "x changed"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      },
+      "post": {
+        "tags": ["log"],
+        "summary": "Creates a new log",
+        "description": "Creates a new log",
+        "operationId": "create-log",
+        "requestBody": {
+          "description": "Create a new log",
+          "content": {
+            "application/json": {
               "schema": {
-                "$ref": "#/definitions/featureListFeaturesResponse"
+                "type": "object",
+                "required": ["message"],
+                "properties": {
+                  "details": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  }
+                },
+                "examples": [
+                  {
+                    "details": "change value of x from 0 to 1",
+                    "message": "x changed"
+                  }
+                ]
               }
             }
           },
-          "tags": [
-            "Generic"
-          ]
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Log created successful",
+            "content": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/clients": {
+      "get": {
+        "tags": ["client"],
+        "summary": "Fetches clients",
+        "description": "Fetches clients",
+        "operationId": "fetch-clients",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["id", "name"],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "##default"
         }
       }
     },
-    "definitions": {
-      "featureFeature": {
-        "type": "object",
-        "properties": {
-          "app_id": {
-            "type": "string",
-            "format": "string"
-          },
-          "args": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "enabled": {
-            "type": "boolean",
-            "format": "boolean"
-          },
-          "extra_data": {
-            "$ref": "#/definitions/protobufStruct",
-            "title": "extra data can be any json data\nFor parnter(特权专区) feature it shold be\nrepeated PartnerExtra extra_data = 10"
-          },
-          "method": {
-            "$ref": "#/definitions/featureFeatureFetchMethod"
-          },
-          "requirements": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "type": {
-            "$ref": "#/definitions/featureFeatureType"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "uuid": {
-            "type": "string",
-            "format": "string"
-          }
-        }
-      },
-      "featureFeatureFetchMethod": {
-        "type": "string",
-        "enum": [
-          "UNKNOWN_METHOD",
-          "GET"
-        ],
-        "default": "UNKNOWN_METHOD"
-      },
-      "featureFeatureType": {
-        "type": "string",
-        "enum": [
-          "UNKNOWN_FEATURE_TYPE",
-          "URL"
-        ],
-        "default": "UNKNOWN_FEATURE_TYPE"
-      },
-      "featureListFeaturesRequest": {
-        "type": "object"
-      },
-      "featureListFeaturesResponse": {
-        "type": "object",
-        "properties": {
-          "features": {
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/featureFeature"
-            }
-          }
-        }
-      },
-      "featureUpdateFeatureRequest": {
-        "type": "object",
-        "properties": {
-          "extra_data": {
-            "$ref": "#/definitions/protobufStruct"
-          },
-          "token": {
-            "type": "string",
-            "format": "string"
-          },
-          "uuid": {
-            "type": "string",
-            "format": "string"
-          }
-        }
-      },
-      "featureUpdateFeatureResponse": {
-        "type": "object",
-        "properties": {
-          "feature": {
-            "$ref": "#/definitions/featureFeature"
-          }
-        }
-      },
-      "protobufListValue": {
-        "type": "object",
-        "properties": {
-          "values": {
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/protobufValue"
-            },
-            "description": "Repeated field of dynamically typed values."
-          }
-        },
-        "description": "`ListValue` is a wrapper around a repeated field of values.\n\nThe JSON representation for `ListValue` is JSON array."
-      },
-      "protobufNullValue": {
-        "type": "string",
-        "enum": [
-          "NULL_VALUE"
-        ],
-        "default": "NULL_VALUE",
-        "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value."
-      },
-      "protobufStruct": {
-        "type": "object",
-        "properties": {
-          "fields": {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/definitions/protobufValue"
-            },
-            "description": "Unordered map of dynamically typed values."
-          }
-        },
-        "description": "`Struct` represents a structured data value, consisting of fields\nwhich map to dynamically typed values. In some languages, `Struct`\nmight be supported by a native representation. For example, in\nscripting languages like JS a struct is represented as an\nobject. The details of that representation are described together\nwith the proto support for the language.\n\nThe JSON representation for `Struct` is JSON object."
-      },
-      "protobufValue": {
-        "type": "object",
-        "properties": {
-          "bool_value": {
-            "type": "boolean",
-            "format": "boolean",
-            "description": "Represents a boolean value."
-          },
-          "list_value": {
-            "$ref": "#/definitions/protobufListValue",
-            "description": "Represents a repeated `Value`."
-          },
-          "null_value": {
-            "$ref": "#/definitions/protobufNullValue",
-            "description": "Represents a null value."
-          },
-          "number_value": {
-            "type": "number",
-            "format": "double",
-            "description": "Represents a double value."
-          },
-          "string_value": {
-            "type": "string",
-            "format": "string",
-            "description": "Represents a string value."
-          },
-          "struct_value": {
-            "$ref": "#/definitions/protobufStruct",
-            "description": "Represents a structured value."
-          }
-        },
-        "description": "`Value` represents a dynamically typed value which can be either\nnull, a number, a string, a boolean, a recursive struct value, or a\nlist of values. A producer of value is expected to set one of that\nvariants, absence of any variant indicates an error.\n\nThe JSON representation for `Value` is JSON value."
+    "requestBodies": {},
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "api_key",
+        "in": "header"
       }
     }
   }
+}
